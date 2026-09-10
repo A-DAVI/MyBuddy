@@ -55,8 +55,14 @@ Use o escopo para indicar qual parte do projeto foi alterada:
 | `frontend` | Angular |
 | `mobile` | Flutter |
 | `auth` | Autenticação / JWT / Keycloak |
-| `infra` | Docker, CI, configurações |
-| `db` | Migrations, schemas |
+| `infra` | Docker, Caddy, compose |
+| `db` | Migrations Flyway, schemas |
+| `docs` | Documentação |
+| `sdd` | Specs e runbooks (`docs/sdd`, `docs/sprints`) |
+| `ci` | GitHub Actions já existente |
+| `test` | Apenas testes |
+
+Allowlist e FAÇA/NÃO FAÇA: [`docs/CONVENTIONS.md`](../docs/CONVENTIONS.md).
 
 ---
 

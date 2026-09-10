@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Jira do MyBuddy
+    url: https://projetodesoftware420.atlassian.net/jira/software/projects/BUDDY/boards/34
+    about: Cards e acompanhamento do time (MY / MYB)
+  - name: Guia de contribuição
+    url: https://github.com/A-DAVI/MyBuddy/blob/main/CONTRIBUTING.md
+    about: Fluxo Impeccable → grilling → SDD → runbook → código
