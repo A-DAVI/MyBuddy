@@ -1,3 +1,4 @@
+# Produção (JAR + JRE). Hot-reload local: ver Dockerfile.dev e docker-compose.dev.yml.
 FROM eclipse-temurin:21-jdk-alpine AS builder
 
 WORKDIR /app

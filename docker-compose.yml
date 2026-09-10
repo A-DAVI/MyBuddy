@@ -1,3 +1,5 @@
+# Stack com Caddy (80/443). Hot-reload local (sem Caddy):
+# docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 services:
 
   # ── MY-239: MongoDB ──────────────────────────────────────
