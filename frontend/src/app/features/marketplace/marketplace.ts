@@ -81,7 +81,7 @@ export class Marketplace implements OnInit, OnDestroy {
   limiteProdutosTodos = 12;
   catalogoAberto = false;
   filtroAberto: DropdownMarketplace | null = null;
-  catalogoCarregando = false;
+  catalogoCarregando = true;
   catalogoErro: string | null = null;
 
   // Banner autoplay
