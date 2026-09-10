@@ -61,6 +61,7 @@ export class DetalhesProduto implements OnInit {
   fotoAtiva = signal<string>("");
   quantidade = signal<number>(1);
   produtosRecomendados = signal<any[]>([]);
+  erroCarregar = signal<string | null>(null);
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
@@ -74,6 +75,8 @@ export class DetalhesProduto implements OnInit {
   }
 
   carregarProduto(id: number): void {
+    this.produto.set(null);
+    this.erroCarregar.set(null);
     this.produtoService.buscarPorId(id).subscribe({
       next: (p) => {
         const prodDetalhado: ProdutoDetalhado = {
@@ -108,7 +111,7 @@ export class DetalhesProduto implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this.router.navigate(["/produtos"]);
+        this.erroCarregar.set("Não foi possível carregar este produto.");
       }
     });
   }

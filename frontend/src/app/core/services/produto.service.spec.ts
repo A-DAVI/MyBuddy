@@ -1,5 +1,7 @@
+/** @vitest-environment jsdom */
+import "@angular/compiler";
+import { Injector } from "@angular/core";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
-import { TestBed } from "@angular/core/testing";
 import { of, throwError } from "rxjs";
 import { ProdutoService, ProdutoRequest } from "./produto.service";
 import { ApiService } from "./api.service";
@@ -18,14 +20,13 @@ describe("ProdutoService", () => {
     localStorage.clear();
     vi.clearAllMocks();
 
-    TestBed.configureTestingModule({
+    const injector = Injector.create({
       providers: [
-        ProdutoService,
         { provide: ApiService, useValue: mockApiService },
+        ProdutoService,
       ],
     });
-
-    service = TestBed.inject(ProdutoService);
+    service = injector.get(ProdutoService);
   });
 
   afterEach(() => {
@@ -75,35 +76,23 @@ describe("ProdutoService", () => {
       expect(path).toContain("categoriaId=1");
     });
 
-    it("should fall back to localStorage on API error", () => {
+    it("should propagate HTTP error instead of localStorage fallback", () => {
       mockApiService.get.mockReturnValue(throwError(() => new Error("Network error")));
 
-      let result: any[] = [];
-      service.buscarComFiltros({}).subscribe((data) => (result = data));
-
-      expect(result.length).toBeGreaterThanOrEqual(16);
-    });
-
-    it("should filter by busca term on fallback", () => {
-      mockApiService.get.mockReturnValue(throwError(() => new Error("err")));
-
-      let result: any[] = [];
-      service.buscarComFiltros({ busca: "racao" }).subscribe((data) => (result = data));
-
-      result.forEach((p) => {
-        const textoUnido = [p.nome, p.descricao, p.categoriaNome].join(" ").toLowerCase();
-        const normalizado = textoUnido.normalize("NFD").replace(/[̀-ͯ]/g, "");
-        expect(normalizado).toContain("racao");
+      let nextEmitted = false;
+      let error: any;
+      service.buscarComFiltros({}).subscribe({
+        next: () => {
+          nextEmitted = true;
+        },
+        error: (err) => {
+          error = err;
+        },
       });
-    });
 
-    it("should filter by precoMax on fallback", () => {
-      mockApiService.get.mockReturnValue(throwError(() => new Error("err")));
-
-      let result: any[] = [];
-      service.buscarComFiltros({ precoMax: 50 }).subscribe((data) => (result = data));
-
-      result.forEach((p) => expect(p.preco).toBeLessThanOrEqual(50));
+      expect(error).toBeDefined();
+      expect(error.message).toBe("Network error");
+      expect(nextEmitted).toBe(false);
     });
   });
 
@@ -118,26 +107,23 @@ describe("ProdutoService", () => {
       expect(result.id).toBe(1);
     });
 
-    it("should fall back to localStorage product on API error", () => {
+    it("should propagate HTTP error instead of localStorage product", () => {
       mockApiService.get.mockReturnValue(throwError(() => new Error("err")));
 
-      let result: any;
-      service.buscarPorId(1).subscribe((data) => (result = data));
-
-      expect(result).toBeDefined();
-      expect(result.id).toBe(1);
-    });
-
-    it("should throw error when id not found in localStorage", () => {
-      mockApiService.get.mockReturnValue(throwError(() => new Error("err")));
-
+      let nextValue: any;
       let error: any;
-      service.buscarPorId(99999).subscribe({
-        error: (err) => (error = err),
+      service.buscarPorId(1).subscribe({
+        next: (data) => {
+          nextValue = data;
+        },
+        error: (err) => {
+          error = err;
+        },
       });
 
       expect(error).toBeDefined();
-      expect(error.message).toContain("não encontrado");
+      expect(error.message).toBe("err");
+      expect(nextValue).toBeUndefined();
     });
   });
 
@@ -237,14 +223,23 @@ describe("ProdutoService", () => {
       expect(result).toEqual(mockCats);
     });
 
-    it("should return mock categories on API error", () => {
+    it("should propagate HTTP error instead of mock categories", () => {
       mockApiService.get.mockReturnValue(throwError(() => new Error("err")));
 
-      let result: any[] = [];
-      service.buscarCategorias().subscribe((data) => (result = data));
+      let nextEmitted = false;
+      let error: any;
+      service.buscarCategorias().subscribe({
+        next: () => {
+          nextEmitted = true;
+        },
+        error: (err) => {
+          error = err;
+        },
+      });
 
-      expect(result.length).toBe(5);
-      expect(result[0].nome).toBe("Alimentação");
+      expect(error).toBeDefined();
+      expect(error.message).toBe("err");
+      expect(nextEmitted).toBe(false);
     });
   });
 

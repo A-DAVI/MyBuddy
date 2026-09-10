@@ -116,7 +116,25 @@
           }
         </div>
 
-        @if (filteredProdutos.length === 0) {
+        @if (catalogoCarregando) {
+          <div class="no-results" role="status">
+            <span class="material-icons catalogo-spin">autorenew</span>
+            <h3>Carregando catálogo...</h3>
+          </div>
+        } @else if (catalogoErro) {
+          <div class="no-results" role="alert">
+            <span class="material-icons">error_outline</span>
+            <h3>Não foi possível carregar o catálogo</h3>
+            <p>{{ catalogoErro }}</p>
+            <app-btn-outline variant="solid" (clicked)="carregarProdutos()">Tentar novamente</app-btn-outline>
+          </div>
+        } @else if (todosProdutos.length === 0) {
+          <div class="no-results">
+            <span class="material-icons">inventory_2</span>
+            <h3>Nenhum produto disponível</h3>
+            <p>O catálogo está vazio no momento.</p>
+          </div>
+        } @else if (filteredProdutos.length === 0) {
           <div class="no-results">
             <span class="material-icons">search_off</span>
             <h3>Nenhum produto encontrado</h3>
@@ -268,6 +286,31 @@
         </div>
       </section>
 
+      @if (catalogoCarregando) {
+        <section class="produtos-section catalogo-resultados">
+          <div class="no-results" role="status">
+            <span class="material-icons catalogo-spin">autorenew</span>
+            <h3>Carregando catálogo...</h3>
+          </div>
+        </section>
+      } @else if (catalogoErro) {
+        <section class="produtos-section catalogo-resultados">
+          <div class="no-results" role="alert">
+            <span class="material-icons">error_outline</span>
+            <h3>Não foi possível carregar o catálogo</h3>
+            <p>{{ catalogoErro }}</p>
+            <app-btn-outline variant="solid" (clicked)="carregarProdutos()">Tentar novamente</app-btn-outline>
+          </div>
+        </section>
+      } @else if (todosProdutos.length === 0) {
+        <section class="produtos-section catalogo-resultados">
+          <div class="no-results">
+            <span class="material-icons">inventory_2</span>
+            <h3>Nenhum produto disponível</h3>
+            <p>O catálogo está vazio no momento.</p>
+          </div>
+        </section>
+      } @else {
       <section class="produtos-section" id="ofertas-especiais">
         <div class="section-header">
           <h2>Ofertas Especiais</h2>
@@ -402,6 +445,7 @@
           </div>
         }
       </section>
+      }
 
       <section class="faq-section animate-fade-up">
         <h2 class="faq-title">Perguntas Frequentes</h2>
