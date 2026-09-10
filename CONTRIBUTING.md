@@ -69,6 +69,8 @@ npm start
 
 Stack completa em containers: `docker compose up --build` (ver [`README.md`](README.md) e [`CLAUDE.md`](CLAUDE.md)).
 
+Hot-reload local (sem Caddy): `docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build` — frontend http://localhost:4200, backend http://localhost:8081, Keycloak http://localhost:8080.
+
 ---
 
 ## Fluxo de trabalho com Git

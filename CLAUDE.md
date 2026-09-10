@@ -36,6 +36,22 @@ docker compose up --build
 # override de portas em docker-compose.override.yml (dev)
 ```
 
+### Hot-reload local (`docker-compose.dev.yml`)
+
+Sem Caddy. Frontend em `ng serve` (hot-reload) e backend com DevTools:
+
+```bash
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+```
+
+| Serviço | URL |
+|---------|-----|
+| Frontend | http://localhost:4200 |
+| Backend | http://localhost:8081 |
+| Keycloak | http://localhost:8080 |
+
+O container do front usa `ng serve --allowed-hosts true` (Vite) para aceitar `Host: localhost:4200` no Docker Desktop. `angular.json` lista `localhost:4200` / `127.0.0.1:4200` na allowlist SSRF (`security.allowedHosts`).
+
 URLs típicas (compose + override):
 
 | Serviço | URL |

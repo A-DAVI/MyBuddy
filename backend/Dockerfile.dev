@@ -1,0 +1,27 @@
+# Hot-reload local (Spring Boot DevTools).
+# Usar com: docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+FROM eclipse-temurin:21-jdk
+
+WORKDIR /app
+
+# wget: healthcheck herdado do docker-compose.yml (wget ... /actuator/health)
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends wget ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pom.xml .
+COPY mvnw .
+COPY .mvn .mvn
+
+RUN chmod +x mvnw && ./mvnw dependency:go-offline -B
+
+COPY src ./src
+RUN mkdir -p /app/uploads
+
+EXPOSE 8081
+
+ENV SPRING_PROFILES_ACTIVE=docker
+
+# poll/quietPeriod: bind mount no Docker Desktop nem sempre dispara inotify
+CMD ./mvnw spring-boot:run -DskipTests \
+    -Dspring-boot.run.jvmArguments="-Dspring.devtools.restart.enabled=true -Dspring.devtools.restart.pollInterval=2s -Dspring.devtools.restart.quietPeriod=1s"

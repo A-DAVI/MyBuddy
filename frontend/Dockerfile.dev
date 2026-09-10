@@ -1,0 +1,19 @@
+# Hot-reload local (ng serve).
+# Usar com: docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+#
+# --allowed-hosts true: opção do Vite; aceita qualquer Host, inclusive
+# localhost:4200 (Docker Desktop). A allowlist em angular.json cobre
+# security.allowedHosts (SSRF) e serve.options.allowedHosts.
+FROM node:22
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install --legacy-peer-deps
+
+COPY . .
+
+EXPOSE 4200
+
+CMD npx ng serve --configuration development --host 0.0.0.0 --port 4200 --poll 2000 --allowed-hosts true

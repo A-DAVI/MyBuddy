@@ -1,0 +1,62 @@
+# Overlay de desenvolvimento (hot-reload) — sem Caddy.
+#
+# Uso:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+#
+# URLs:
+#   Frontend  http://localhost:4200
+#   Backend   http://localhost:8081
+#   Keycloak  http://localhost:8080
+#
+# Não misturar com docker-compose.override.yml no mesmo up (portas do front
+# conflitam: 4200 vs 80). Caddy fica no profile prod-proxy.
+
+services:
+
+  caddy:
+    profiles: ["prod-proxy"]
+
+  mongodb:
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+
+  redis:
+    ports:
+      - "6379:6379"
+
+  postgres:
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+
+  keycloak:
+    ports:
+      - "${KEYCLOAK_PORT:-8080}:8080"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8081:8081"
+    environment:
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost,http://localhost:4200}
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/pom.xml:/app/pom.xml
+      - backend-m2:/root/.m2
+    healthcheck:
+      start_period: 180s
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./frontend:/app
+      - frontend-node-modules:/app/node_modules
+
+volumes:
+  backend-m2:
+  frontend-node-modules:
