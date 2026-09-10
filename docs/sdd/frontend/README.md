@@ -14,6 +14,8 @@ Arquivo irmão ou seção no SDD, curto:
 
 Inventário vem do Impeccable; este brief + grilling viram o SDD.
 
+Specs: [SDD — Honestidade da Vitrine Produtos](SDD%20-%20Honestidade%20da%20Vitrine%20Produtos.md) (`/produtos`, decisão de grilling **seguir**).
+
 ## Cuidados deste módulo
 
 - Não tratar mock/`localStorage` como requisito de produto.
