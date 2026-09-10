@@ -160,6 +160,12 @@
         </div>
       </section>
     }
+  } @else if (erroCarregar()) {
+    <div class="carregando">
+      <span class="material-icons">error_outline</span>
+      <p>{{ erroCarregar() }}</p>
+      <a routerLink="/produtos">Voltar ao catálogo</a>
+    </div>
   } @else {
     <div class="carregando">
       <span class="material-icons spin-loader">autorenew</span>

@@ -49,22 +49,11 @@ export class ProdutoService {
         }
         return res;
       }),
-      catchError((err) => {
-        console.warn("[ProdutoService] Erro ao buscar produtos da API. Usando mock local.", err);
-        return of(this.obterProdutosLocaisFiltrados(filtros));
-      })
     );
   }
 
   buscarPorId(id: number): Observable<any> {
-    return this.api.get<any>(`produtos/${id}`).pipe(
-      catchError((err) => {
-        console.warn(`[ProdutoService] Erro ao buscar produto #${id} da API. Usando mock local.`, err);
-        const produto = this.obterProdutosLocais().find((p) => p.id === id);
-        if (produto) return of(produto);
-        return throwError(() => new Error("Produto não encontrado no mock local."));
-      })
-    );
+    return this.api.get<any>(`produtos/${id}`);
   }
 
   criar(request: ProdutoRequest): Observable<any> {
@@ -98,18 +87,7 @@ export class ProdutoService {
   }
 
   buscarCategorias(): Observable<any[]> {
-    return this.api.get<any[]>("categorias").pipe(
-      catchError((err) => {
-        console.warn("[ProdutoService] Erro ao buscar categorias da API. Usando mock local.", err);
-        return of([
-          { id: 1, nome: "Alimentação", subcategorias: [{ id: 1, nome: "Ração" }] },
-          { id: 2, nome: "Acessórios", subcategorias: [{ id: 2, nome: "Coleiras" }] },
-          { id: 3, nome: "Brinquedos", subcategorias: [{ id: 3, nome: "Bolas e Pelúcias" }] },
-          { id: 4, nome: "Farmácia", subcategorias: [{ id: 4, nome: "Antipulgas" }] },
-          { id: 5, nome: "Higiene", subcategorias: [{ id: 5, nome: "Tapetes" }] },
-        ]);
-      })
-    );
+    return this.api.get<any[]>("categorias");
   }
 
   avaliarProduto(produtoId: number, request: { nota: number; comentario: string }): Observable<any> {

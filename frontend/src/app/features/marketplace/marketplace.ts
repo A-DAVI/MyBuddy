@@ -81,6 +81,8 @@ export class Marketplace implements OnInit, OnDestroy {
   limiteProdutosTodos = 12;
   catalogoAberto = false;
   filtroAberto: DropdownMarketplace | null = null;
+  catalogoCarregando = false;
+  catalogoErro: string | null = null;
 
   // Banner autoplay
   activeBannerIndex = 0;
@@ -192,6 +194,8 @@ export class Marketplace implements OnInit, OnDestroy {
 
   // === Carregar Produtos ===
   carregarProdutos() {
+    this.catalogoCarregando = true;
+    this.catalogoErro = null;
     this.produtoService.buscarComFiltros().subscribe({
       next: (dados) => {
         const mapeados = dados.map((p: any) => ({
@@ -218,8 +222,17 @@ export class Marketplace implements OnInit, OnDestroy {
         this.maisVendidos = this.obterMaisVendidos(mapeados).slice(0, 6);
         this.carregarFavoritosVisual();
         this.filtrarProdutos();
+        this.catalogoCarregando = false;
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        console.error(err);
+        this.todosProdutos = [];
+        this.produtosOferta = [];
+        this.maisVendidos = [];
+        this.filteredProdutos = [];
+        this.catalogoErro = "Não foi possível carregar o catálogo. Tente novamente.";
+        this.catalogoCarregando = false;
+      }
     });
   }
 
@@ -370,171 +383,11 @@ export class Marketplace implements OnInit, OnDestroy {
     },
   ];
 
-  produtosOferta: Produto[] = [
-    {
-      id: 1,
-      urlImagem: "/assets/placeholders/pets/purebred-dog-being-cute-studio.jpg",
-      titulo: "Ração Premier Formula Cães Adultos Frango",
-      preco: 189.9,
-      precoAntigo: 229.9,
-      nomeLoja: "Petlove",
-      badgeDesconto: "17% OFF",
-      favorito: false,
-      categoria: "Rações",
-    },
-    {
-      id: 2,
-      urlImagem: "/assets/placeholders/pets/Border Collie 01.webp",
-      titulo: "Antipulgas Bravecto para Cães 10 a 20kg",
-      preco: 215.5,
-      nomeLoja: "Cobasi",
-      badgeDesconto: "Frete Grátis",
-      favorito: true,
-      categoria: "Farmácia",
-    },
-    {
-      id: 3,
-      urlImagem: "/assets/placeholders/pets/adocao-coelho.jpg",
-      titulo: "Tapete Higiênico Super Seco 30 unidades",
-      preco: 49.9,
-      precoAntigo: 65.9,
-      nomeLoja: "Petz",
-      badgeDesconto: "24% OFF",
-      favorito: false,
-      categoria: "Higiene",
-    },
-    {
-      id: 4,
-      urlImagem: "/assets/placeholders/pets/Paçoca.jpg",
-      titulo: "Bolinha de Tênis Chalesco para Cães",
-      preco: 15.9,
-      nomeLoja: "Bicho Chic",
-      favorito: false,
-      categoria: "Brinquedos",
-    },
-  ];
+  produtosOferta: Produto[] = [];
 
-  maisVendidos: Produto[] = [
-    {
-      id: 5,
-      urlImagem: "/assets/placeholders/pets/gato-laranja-e1748043537291.webp",
-      titulo: "Areia Higiênica Pipicat Floral 4kg",
-      preco: 22.9,
-      nomeLoja: "Cobasi",
-      favorito: false,
-      categoria: "Higiene",
-    },
-    {
-      id: 6,
-      urlImagem: "/assets/placeholders/pets/kitty-with-monochrome-wall-her.jpg",
-      titulo: "Ração Golden Gatos Adultos Frango 10kg",
-      preco: 139.9,
-      nomeLoja: "Petlove",
-      favorito: true,
-      categoria: "Rações",
-    },
-    {
-      id: 7,
-      urlImagem: "/assets/placeholders/pets/Kira.jpg",
-      titulo: "Coleira Antipulgas Seresto Cães Até 8kg",
-      preco: 249.9,
-      nomeLoja: "Petz",
-      favorito: false,
-      categoria: "Farmácia",
-    },
-    {
-      id: 8,
-      urlImagem: "/assets/placeholders/pets/gato-laranja-e1748043537291.webp",
-      titulo: "Arranhador de Papelão Rampa Gatos",
-      preco: 35.0,
-      precoAntigo: 45.0,
-      nomeLoja: "Casa do Criador",
-      badgeDesconto: "22% OFF",
-      favorito: false,
-      categoria: "Brinquedos",
-    },
-  ];
+  maisVendidos: Produto[] = [];
 
-  todosProdutos: Produto[] = [
-    ...this.produtosOferta,
-    ...this.maisVendidos,
-    {
-      id: 9,
-      titulo: "Ração Golden Special Cães Adultos",
-      preco: 139.9,
-      precoAntigo: 159.9,
-      nomeLoja: "Cobasi",
-      urlImagem: "/assets/placeholders/pets/purebred-dog-being-cute-studio.jpg",
-      badgeDesconto: "12% OFF",
-      favorito: false,
-      categoria: "Rações",
-    },
-    {
-      id: 10,
-      titulo: "Tapete Higiênico Super Premium",
-      preco: 45.9,
-      nomeLoja: "Petz",
-      urlImagem: "/assets/placeholders/pets/Border Collie 01.webp",
-      favorito: true,
-      categoria: "Higiene",
-    },
-    {
-      id: 11,
-      titulo: "Brinquedo Mordedor Osso Borracha",
-      preco: 22.9,
-      nomeLoja: "Cobasi",
-      urlImagem: "/assets/placeholders/pets/Paçoca.jpg",
-      favorito: false,
-      categoria: "Brinquedos",
-    },
-    {
-      id: 12,
-      titulo: "Ração Royal Canin Gatos Castrados",
-      preco: 219.9,
-      precoAntigo: 249.9,
-      nomeLoja: "Petz",
-      urlImagem: "/assets/placeholders/pets/kitty-with-monochrome-wall-her.jpg",
-      badgeDesconto: "Frete Grátis",
-      favorito: true,
-      categoria: "Rações",
-    },
-    {
-      id: 13,
-      titulo: "Areia Higiênica Viva Verde!",
-      preco: 49.9,
-      nomeLoja: "Pet Love",
-      urlImagem: "/assets/placeholders/pets/gato-laranja-e1748043537291.webp",
-      favorito: false,
-      categoria: "Higiene",
-    },
-    {
-      id: 14,
-      titulo: "Cama Pet Conforto Redonda G",
-      preco: 110.0,
-      nomeLoja: "Cobasi",
-      urlImagem: "/assets/placeholders/pets/Armindo.png",
-      favorito: false,
-      categoria: "Camas",
-    },
-    {
-      id: 15,
-      titulo: "Petisco Dreamies Sabor Salmão",
-      preco: 6.5,
-      nomeLoja: "Petz",
-      urlImagem: "/assets/placeholders/pets/gato-laranja-e1748043537291.webp",
-      favorito: false,
-      categoria: "Petiscos",
-    },
-    {
-      id: 16,
-      titulo: "Shampoo Neutro Pelos Claros",
-      preco: 34.9,
-      nomeLoja: "Boutique Animal",
-      urlImagem: "/assets/placeholders/pets/Border Collie 01.webp",
-      favorito: false,
-      categoria: "Higiene",
-    },
-  ];
+  todosProdutos: Produto[] = [];
 
   filtrarProdutos() {
     let resultado = [...this.todosProdutos];

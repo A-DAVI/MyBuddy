@@ -543,6 +543,12 @@
     font-size: 1.1rem;
     margin: 0;
   }
+
+  a {
+    margin-top: 1rem;
+    color: var(--primary-color, #ff7900);
+    font-weight: 700;
+  }
 }
 
 @keyframes spin {
