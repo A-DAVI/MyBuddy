@@ -2,7 +2,7 @@
 
 - **Módulo:** frontend (Angular)
 - **Superfície / rotas:** `/produtos` (lista) e `/produtos/:id` (detalhe — mesmo serviço de leitura)
-- **Inventário Impeccable:** [`docs/sprints/frontend/inventory-impeccable-2026-09-10.md`](../../sprints/frontend/inventory-impeccable-2026-09-10.md) — **ainda não está em `main`**; vive no [PR #2](https://github.com/A-DAVI/MyBuddy/pull/2) (`cursor/inventory-impeccable-frontend-0505`). Se o merge do inventário ocorrer antes desta implementação, o caminho acima passa a ser canônico.
+- **Inventário Impeccable:** [`docs/sprints/frontend/inventory-impeccable-2026-09-10.md`](../../sprints/frontend/inventory-impeccable-2026-09-10.md) — já em `main` via [PR #2](https://github.com/A-DAVI/MyBuddy/pull/2).
 - **Decisão de grilling:** **seguir** (já grillado — não reabrir). Fatia: matar sucesso silencioso na leitura do catálogo.
 - **Shape brief:** seção [Shape / UX](#shape--ux) neste arquivo.
 - **Runbook:** [`docs/sprints/frontend/runbook-honestidade-vitrine-produtos.md`](../../sprints/frontend/runbook-honestidade-vitrine-produtos.md)

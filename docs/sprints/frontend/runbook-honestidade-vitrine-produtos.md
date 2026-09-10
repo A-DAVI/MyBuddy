@@ -2,7 +2,7 @@
 
 - **Status:** `planned`
 - **SDD:** [`docs/sdd/frontend/SDD - Honestidade da Vitrine Produtos.md`](../../sdd/frontend/SDD%20-%20Honestidade%20da%20Vitrine%20Produtos.md)
-- **Inventário:** [`inventory-impeccable-2026-09-10.md`](inventory-impeccable-2026-09-10.md) — se o arquivo não estiver em `main`, está no [PR #2](https://github.com/A-DAVI/MyBuddy/pull/2)
+- **Inventário:** [`inventory-impeccable-2026-09-10.md`](inventory-impeccable-2026-09-10.md) — em `main` via [PR #2](https://github.com/A-DAVI/MyBuddy/pull/2)
 - **Apetite / fatia:** uma superfície (vitrine). Matar silent success nos **reads** de `ProdutoService` + estados loading / empty / error em `/produtos` (PDP só se trivial). Sem redesenho.
 - **Branch sugerida (implementação):** a partir de `Developer`, `feat/MYB-XXX-honestidade-vitrine-produtos` (card Jira quando existir). **Este** PR de docs não implementa.
 - **Módulo:** frontend Angular. **Não tocar** `backend/`, `mobile/`, checkout, Mercado Pago.
